@@ -44,15 +44,15 @@ for (var i=0; i<maxyx.x; i++) {
 		curses.waddch(subwin, 0xff & Math.floor(Math.random() * 0xff));
 		/* tag subwin as dirty */
 		curses.wnoutrefresh(subwin);
-	}, 125 + Math.floor(Math.random() * 250), subwins[i]);
+	}, 100 + Math.floor(Math.random() * 250), subwins[i]);
 	
 }
 
-/* refresh every 25ms */
+/* refresh every 100ms */
 setInterval(function () {
 	/* repaint dirty subwins */
 	curses.doupdate();
-}, 25);
+}, 100);
 
 /* exit after 25s */
 setTimeout(function () {
