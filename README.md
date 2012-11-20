@@ -39,14 +39,13 @@ node-gyp rebuild
 ## Usage
 
 ```javascript
-
-    /* load curses */
+/* load curses */
 var curses = require('curses')
 
-    /* initialize top level window */
+/* initialize top level window */
 ,   stdwin = curses.initscr()
 
-    /* color pair definitions */
+/* color pair definitions */
 ,   GLYPH_COLOR = 1
 ,   BORDER_COLOR = 2
 
@@ -80,8 +79,9 @@ var sub_height = 20
 
 /* setup the subwindow's background and echo Hello world! into it */
 curses.wattrset(subwin, curses.color_pair(GLYPH_COLOR));
-curses.wbkgd(subwin, '_'.charCodeAt(0));
+curses.wbkgd(subwin, '\u2591'.charCodeAt(0));
 curses.wclear(subwin);
+curses.wmove(subwin, 1, 8);
 curses.waddstr(subwin, "Hello world!");
 curses.wrefresh(subwin);
 
@@ -90,7 +90,6 @@ curses.wgetch(subwin);
 
 /* reset terminal (never forget this) */
 curses.endwin();
-
 ```
 
 

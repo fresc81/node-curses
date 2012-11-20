@@ -1,11 +1,11 @@
 
-    /* load curses */
+/* load curses */
 var curses = require('../curses')
 
-    /* initialize top level window */
+/* initialize top level window */
 ,   stdwin = curses.initscr()
 
-    /* color pair definitions */
+/* color pair definitions */
 ,   GLYPH_COLOR = 1
 ,   BORDER_COLOR = 2
 
