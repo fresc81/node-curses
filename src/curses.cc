@@ -377,6 +377,53 @@ Handle<Value> node_wclear(const Arguments& args) {
 	return scope.Close(Int32::New( result ));
 }
 
+Handle<Value> node_wdelch(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(1)
+	NODE_ARG(0, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int result		= wdelch( win );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_wdeleteln(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(1)
+	NODE_ARG(0, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int result		= wdeleteln( win );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_wechochar(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	chtype c		= CAST_CHTYPE(args[0]->Int32Value());
+	int result		= wechochar( win, c );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_werase(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(1)
+	NODE_ARG(0, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int result		= werase( win );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_wgetch(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(1)
+	NODE_ARG(0, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int result		= wgetch( win );
+	return scope.Close(Int32::New( result ));
+}
+
 Handle<Value> node_wmove(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(3)
@@ -700,6 +747,31 @@ void init(Handle<Object> target) {
 	);
 	
 	target->Set(
+		String::NewSymbol("wdelch"),
+		FunctionTemplate::New(node_wdelch)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("wdeleteln"),
+		FunctionTemplate::New(node_wdeleteln)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("wechochar"),
+		FunctionTemplate::New(node_wechochar)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("werase"),
+		FunctionTemplate::New(node_werase)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("wgetch"),
+		FunctionTemplate::New(node_wgetch)->GetFunction()
+	);
+
+	target->Set(
 		String::NewSymbol("wmove"),
 		FunctionTemplate::New(node_wmove)->GetFunction()
 	);
@@ -959,11 +1031,11 @@ NODE_MODULE(curses, init)
 	int     wclrtoeol(WINDOW *);
 	int     wcolor_set(WINDOW *, short, void *);
 	void    wcursyncup(WINDOW *);
-	int     wdelch(WINDOW *);
-	int     wdeleteln(WINDOW *);
-	int     wechochar(WINDOW *, const chtype);
-	int     werase(WINDOW *);
-	int     wgetch(WINDOW *);
+#	int     wdelch(WINDOW *);
+#	int     wdeleteln(WINDOW *);
+#	int     wechochar(WINDOW *, const chtype);
+#	int     werase(WINDOW *);
+#	int     wgetch(WINDOW *);
 	int     wgetnstr(WINDOW *, char *, int);
 	int     wgetstr(WINDOW *, char *);
 	int     whline(WINDOW *, chtype, int);
@@ -978,7 +1050,7 @@ NODE_MODULE(curses, init)
 	int     winsstr(WINDOW *, const char *);
 	int     winstr(WINDOW *, char *);
 #	int     wmove(WINDOW *, int, int);
-	int     wnoutrefresh(WINDOW *);
+#	int     wnoutrefresh(WINDOW *);
 	int     wprintw(WINDOW *, const char *, ...);
 	int     wredrawln(WINDOW *, int, int);
 #	int     wrefresh(WINDOW *);
