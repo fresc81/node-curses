@@ -18,6 +18,7 @@
 			[
 				'OS=="win"',
 				{
+					'defines' : ['PDC_WIDE'],
 					'include_dirs' : [
 						'deps/PDCurses-3.4'
 					],
