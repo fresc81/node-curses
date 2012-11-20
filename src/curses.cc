@@ -187,6 +187,62 @@ Handle<Value> node_initscr(const Arguments& args) {
 	return scope.Close(Integer::New( CAST_POINTER(result) ));
 }
 
+Handle<Value> node_keyname(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(1)
+	NODE_ARG(0, Number)
+	int k			= CAST_INT32(args[0]->Int32Value());
+	char* result	= keyname( k );
+	return scope.Close(String::New( result ));
+}
+
+Handle<Value> node_keypad(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int i			= CAST_INT32(args[1]->Int32Value());
+	int result		= keypad( win, i );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_killchar(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	char result	= killchar( );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_leaveok(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int i			= CAST_INT32(args[1]->Int32Value());
+	int result		= leaveok( win, i );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_longname(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	char* result	= longname( );
+	return scope.Close(String::New( result ));
+}
+
+Handle<Value> node_meta(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int i			= CAST_INT32(args[1]->Int32Value());
+	int result		= meta( win, i );
+	return scope.Close(Int32::New( result ));
+}
+
 Handle<Value> node_newpad(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(2)
@@ -667,6 +723,36 @@ void init(Handle<Object> target) {
 	);
 	
 	target->Set(
+		String::NewSymbol("keyname"),
+		FunctionTemplate::New(node_keyname)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("keypad"),
+		FunctionTemplate::New(node_keypad)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("killchar"),
+		FunctionTemplate::New(node_killchar)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("leaveok"),
+		FunctionTemplate::New(node_leaveok)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("longname"),
+		FunctionTemplate::New(node_longname)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("meta"),
+		FunctionTemplate::New(node_meta)->GetFunction()
+	);
+
+	target->Set(
 		String::NewSymbol("newpad"),
 		FunctionTemplate::New(node_newpad)->GetFunction()
 	);
@@ -878,12 +964,12 @@ NODE_MODULE(curses, init)
 	bool    isendwin(void);
 	bool    is_linetouched(WINDOW *, int);
 	bool    is_wintouched(WINDOW *);
-	char   *keyname(int);
-	int     keypad(WINDOW *, bool);
-	char    killchar(void);
-	int     leaveok(WINDOW *, bool);
-	char   *longname(void);
-	int     meta(WINDOW *, bool);
+#	char   *keyname(int);
+#	int     keypad(WINDOW *, bool);
+#	char    killchar(void);
+#	int     leaveok(WINDOW *, bool);
+#	char   *longname(void);
+#	int     meta(WINDOW *, bool);
 	int     move(int, int);
 	int     mvaddch(int, int, const chtype);
 	int     mvaddchnstr(int, int, const chtype *, int);
