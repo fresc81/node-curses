@@ -1,0 +1,22 @@
+{
+	"name" : "curses",
+	"version" : "0.0.2",
+	"description" : "Bindings for the native curses library, a full featured console IO library.",
+	"main" : "./curses",
+	"dependencies" : {
+		"tar" : ">=0.1.13"
+	},
+	"scripts" : {
+		"install" : "node ./pre-build.js",
+		"postinstall" : "node-gyp rebuild",
+		"test" : "node ./test/test.js"
+	},
+	"keywords" : [
+		"curses", "console", "IO",
+		"window", "panel", "UI",
+		"color", "terminal"
+	],
+	"repository" : "git://github.com/fresc81/node-curses.git",
+	"author" : "Paul Bottin",
+	"license" : "BSD"
+}
