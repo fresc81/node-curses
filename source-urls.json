@@ -1,4 +1,6 @@
 {
 	"win32" :	"http://switch.dl.sourceforge.net/project/pdcurses/pdcurses/3.4/PDCurses-3.4.tar.gz",
-	"linux" :	"http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.7.tar.gz"
+	"linux" :	"http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.7.tar.gz",
+	"mac" :		"http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.7.tar.gz",
+	"solaris" :	"http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.7.tar.gz"
 }
