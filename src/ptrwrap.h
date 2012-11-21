@@ -8,12 +8,13 @@
 #ifndef PTRWRAP_H_
 #define PTRWRAP_H_
 
-#define BUILDING_NODE_EXTENSION
+#ifndef BUILDING_NODE_EXTENSION
+#	define BUILDING_NODE_EXTENSION
+#endif
 
 #include <node.h>
 #include <v8.h>
 
-#include <typeinfo>
 
 template<class T>
 class PtrWrap: public node::ObjectWrap
@@ -26,7 +27,7 @@ public:
 	static inline void Init()
 	{
 		v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(New);
-		tpl->SetClassName(v8::String::NewSymbol(typeid(T).name()));
+		tpl->SetClassName(v8::String::NewSymbol("Pointer"));
 		tpl->InstanceTemplate()->SetInternalFieldCount(1);
 		constructor = v8::Persistent<v8::Function>::New(tpl->GetFunction());
 	}

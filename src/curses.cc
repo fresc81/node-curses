@@ -1,6 +1,8 @@
 /* Public Domain */
 
-#define BUILDING_NODE_EXTENSION
+#ifndef BUILDING_NODE_EXTENSION
+#	define BUILDING_NODE_EXTENSION
+#endif
 
 #include <node.h>
 #include <v8.h>
@@ -45,8 +47,10 @@ using namespace v8;
 
 #define CAST_POINTER(t, p)	PtrWrap<t>::New( p )
 
+template <>
 v8::Persistent<v8::Function> PtrWrap<WINDOW>::constructor;
 
+template <>
 v8::Persistent<v8::Function> PtrWrap<SCREEN>::constructor;
 
 Handle<Value> node_color_pair(const Arguments& args) {
