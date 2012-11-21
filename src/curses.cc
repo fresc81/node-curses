@@ -37,6 +37,7 @@ using namespace v8;
 #define CAST_INT64(i)	static_cast<int64_t>( i )
 
 #define CAST_CHTYPE(c)	static_cast<chtype>( c )
+#define CAST_BOOL(b)	static_cast<bool>( b )
 
 #define CAST_PCHTYPE(s)	reinterpret_cast<chtype*>( s )
 #define CAST_PWINDOW(w)	reinterpret_cast<WINDOW*>( w )
@@ -106,7 +107,7 @@ Handle<Value> node_doupdate(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(0)
 	int result		= doupdate( );
-	return scope.Close(Int32::New( result ));
+	return scope.Close(Number::New( result ));
 }
 
 Handle<Value> node_dupwin(const Arguments& args) {
@@ -200,10 +201,10 @@ Handle<Value> node_keypad(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(2)
 	NODE_ARG(0, Number)
-	NODE_ARG(1, Number)
+	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
-	int i			= CAST_INT32(args[1]->Int32Value());
-	int result		= keypad( win, i );
+	bool b			= CAST_BOOL(args[1]->BooleanValue());
+	int result		= keypad( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -218,10 +219,10 @@ Handle<Value> node_leaveok(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(2)
 	NODE_ARG(0, Number)
-	NODE_ARG(1, Number)
+	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
-	int i			= CAST_INT32(args[1]->Int32Value());
-	int result		= leaveok( win, i );
+	bool b			= CAST_BOOL(args[1]->BooleanValue());
+	int result		= leaveok( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -236,10 +237,10 @@ Handle<Value> node_meta(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(2)
 	NODE_ARG(0, Number)
-	NODE_ARG(1, Number)
+	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
-	int i			= CAST_INT32(args[1]->Int32Value());
-	int result		= meta( win, i );
+	bool b			= CAST_BOOL(args[1]->BooleanValue());
+	int result		= meta( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -273,9 +274,9 @@ Handle<Value> node_scrollok(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(2)
 	NODE_ARG(0, Number)
-	NODE_ARG(1, Number)
+	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
-	int i			= CAST_INT32(args[1]->Int32Value());
+	bool b			= CAST_BOOL(args[1]->BooleanValue());
 	int result		= scrollok( win, i );
 	return scope.Close(Int32::New( result ));
 }
@@ -522,6 +523,52 @@ Handle<Value> node_wscrl(const Arguments& args) {
 	return scope.Close(Int32::New( result ));
 }
 
+Handle<Value> node_curses_version(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	const char * result = curses_version();
+	return scope.Close(String::New( result ));
+}
+
+Handle<Value> node_assume_default_colors(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	int a			= CAST_INT32(args[0]->Int32Value());
+	int b			= CAST_INT32(args[1]->Int32Value());
+	int result		= assume_default_colors(a, b);
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_has_key(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(1)
+	NODE_ARG(0, Number)
+	int k			= CAST_INT32(args[0]->Int32Value());
+	bool result		= has_key(k);
+	return scope.Close(Boolean::New( result ));
+}
+
+Handle<Value> node_use_default_colors(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	int result		= use_default_colors();
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_wresize(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(3)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	NODE_ARG(2, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
+	int h			= CAST_INT32(args[1]->Int32Value());
+	int w			= CAST_INT32(args[2]->Int32Value());
+	int result		= wresize(win, h, w);
+	return scope.Close(Int32::New( result ));
+}
 
 void init(Handle<Object> target) {
 	
@@ -877,6 +924,32 @@ void init(Handle<Object> target) {
 		FunctionTemplate::New(node_wscrl)->GetFunction()
 	);
 	
+	target->Set(
+		String::NewSymbol("assume_default_colors"),
+		FunctionTemplate::New(node_assume_default_colors)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("curses_version"),
+		FunctionTemplate::New(node_curses_version)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("has_key"),
+		FunctionTemplate::New(node_has_key)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("use_default_colors"),
+		FunctionTemplate::New(node_use_default_colors)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("wresize"),
+		FunctionTemplate::New(node_wresize)->GetFunction()
+	);
+
+
 }
 
 NODE_MODULE(curses, init)
@@ -885,8 +958,8 @@ NODE_MODULE(curses, init)
 
 /*
 
-	PDCurses-3.4
-	~~~~~~~~~~~~
+	TODO: implement functions and tag with #
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #	int     addch(const chtype);
 	int     addchnstr(const chtype *, int);
@@ -1150,5 +1223,49 @@ NODE_MODULE(curses, init)
 	void    wtimeout(WINDOW *, int);
 	int     wtouchln(WINDOW *, int, int, int);
 	int     wvline(WINDOW *, chtype, int);
+
+	chtype  getattrs(WINDOW *);
+	int     getbegx(WINDOW *);
+	int     getbegy(WINDOW *);
+	int     getmaxx(WINDOW *);
+	int     getmaxy(WINDOW *);
+	int     getparx(WINDOW *);
+	int     getpary(WINDOW *);
+	int     getcurx(WINDOW *);
+	int     getcury(WINDOW *);
+	void    traceoff(void);
+	void    traceon(void);
+	char   *unctrl(chtype);
+
+	int     crmode(void);
+	int     nocrmode(void);
+	int     draino(int);
+	int     resetterm(void);
+	int     fixterm(void);
+	int     saveterm(void);
+	int     setsyx(int, int);
+
+	int     mouse_set(unsigned long);
+	int     mouse_on(unsigned long);
+	int     mouse_off(unsigned long);
+	int     request_mouse_pos(void);
+	int     map_button(unsigned long);
+	void    wmouse_position(WINDOW *, int *, int *);
+	unsigned long getmouse(void);
+	unsigned long getbmap(void);
+
+#	int     assume_default_colors(int, int);
+#	const char *curses_version(void);
+#	bool    has_key(int);
+#	int     use_default_colors(void);
+#	int     wresize(WINDOW *, int, int);
+
+	int     mouseinterval(int);
+	mmask_t mousemask(mmask_t, mmask_t *);
+	bool    mouse_trafo(int *, int *, bool);
+	int     nc_getmouse(MEVENT *);
+	int     ungetmouse(MEVENT *);
+	bool    wenclose(const WINDOW *, int, int);
+	bool    wmouse_trafo(const WINDOW *, int *, int *, bool);
 
 */
