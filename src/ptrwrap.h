@@ -17,19 +17,20 @@
 
 
 template<class T>
-class PtrWrap: public node::ObjectWrap
+class PtrWrap : public node::ObjectWrap
 {
 private:
 	T *ptr_;
-	static v8::Persistent<v8::Function> constructor;
 
 public:
-	static inline void Init()
+	static v8::Persistent<v8::Function> constructor;
+	
+	static inline v8::Persistent<v8::Function> Init(const char *name)
 	{
 		v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(New);
-		tpl->SetClassName(v8::String::NewSymbol("Pointer"));
+		tpl->SetClassName(v8::String::NewSymbol(name));
 		tpl->InstanceTemplate()->SetInternalFieldCount(1);
-		constructor = v8::Persistent<v8::Function>::New(tpl->GetFunction());
+		return v8::Persistent<v8::Function>::New(tpl->GetFunction());
 	}
 
 	inline T * Unwrap ()

@@ -48,10 +48,10 @@ using namespace v8;
 #define CAST_POINTER(t, p)	PtrWrap<t>::New( p )
 
 template <>
-v8::Persistent<v8::Function> PtrWrap<WINDOW>::constructor;
+v8::Persistent<v8::Function> PtrWrap<WINDOW>::constructor = PtrWrap<WINDOW>::Init("WINDOW");
 
 template <>
-v8::Persistent<v8::Function> PtrWrap<SCREEN>::constructor;
+v8::Persistent<v8::Function> PtrWrap<SCREEN>::constructor = PtrWrap<SCREEN>::Init("SCREEN");
 
 Handle<Value> node_color_pair(const Arguments& args) {
 	HandleScope scope;
@@ -955,8 +955,6 @@ void init(Handle<Object> target) {
 		String::NewSymbol("wresize"),
 		FunctionTemplate::New(node_wresize)->GetFunction()
 	);
-
-	PtrWrap<WINDOW>::Init();
 
 }
 
