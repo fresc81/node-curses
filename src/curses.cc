@@ -277,7 +277,7 @@ Handle<Value> node_scrollok(const Arguments& args) {
 	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]->IntegerValue());
 	bool b			= CAST_BOOL(args[1]->BooleanValue());
-	int result		= scrollok( win, i );
+	int result		= scrollok( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -546,7 +546,7 @@ Handle<Value> node_has_key(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_ARG(0, Number)
 	int k			= CAST_INT32(args[0]->Int32Value());
-	bool result		= has_key(k);
+	bool result		= has_key(k)!=0;
 	return scope.Close(Boolean::New( result ));
 }
 
