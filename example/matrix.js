@@ -38,7 +38,7 @@ var subwins = new Array(maxyx.x);
 for (var i=0; i<maxyx.x; i++) {
 	subwins[i] = curses.subwin(stdwin, maxyx.y, 1, 1, i+1);
 	curses.wattrset(subwins[i], curses.color_pair(1));
-	curses.scrollok(subwins[i], 1);
+	curses.scrollok(subwins[i], true);
 	
 	setInterval(function (subwin) {
 		curses.waddch(subwin, 0xff & Math.floor(Math.random() * 0xff));
