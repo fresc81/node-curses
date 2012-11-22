@@ -15,18 +15,12 @@
 #include <node.h>
 #include <v8.h>
 
+
 /**
  * declares a PtrWrap class for the type t
  */
-#define PTRWRAP_DECLARE(t)													\
-		template <> v8::Persistent<v8::Function> PtrWrap< t >::ctor_;		\
-
-/**
- * initializes a PtrWrap class for the type t, to be called within the module's
- * initialization function
- */
-#define PTRWRAP_INIT(t, o)													\
-		PtrWrap< t >::Init( #t , o );										\
+#define PTRWRAP_DECLARE(t)																					\
+		template <> v8::Persistent<v8::Function> PtrWrap< t >::ctor_ = PtrWrap< t >::Init( #t );			\
 
 
 /**
@@ -47,6 +41,7 @@ private:
 	static v8::Persistent<v8::Function> ctor_;
 
 public:
+
 	/**
 	 * test, if obj is an instance of this class, no inheritance
 	 */
@@ -62,7 +57,7 @@ public:
 	/**
 	 * initializes this class, will be called through PTRWRAP_INIT macro
 	 */
-	static inline v8::Persistent<v8::Function> Init(const char *name, v8::Handle<v8::Object> target)
+	static inline v8::Persistent<v8::Function> Init(const char *name)
 	{
 		v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(New);
 		v8::Local<v8::String> symbol = v8::String::NewSymbol(name);
@@ -73,9 +68,7 @@ public:
 				v8::FunctionTemplate::New(ToString)
 		);
 		tpl->ReadOnlyPrototype();
-		ctor_ = v8::Persistent<v8::Function>::New(tpl->GetFunction());
-		target->SetHiddenValue(symbol, ctor_);
-		return ctor_;
+		return v8::Persistent<v8::Function>::New(tpl->GetFunction());
 	}
 
 	/**

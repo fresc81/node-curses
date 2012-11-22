@@ -584,9 +584,6 @@ Handle<Value> node_wresize(const Arguments& args) {
 
 void init(Handle<Object> target) {
 	
-	PTRWRAP_INIT(WINDOW, target)
-	PTRWRAP_INIT(SCREEN, target)
-
 	target->Set(
 		String::NewSymbol("CURSES_RGB"),
 #ifdef PDC_RGB
