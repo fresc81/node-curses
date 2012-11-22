@@ -87,8 +87,11 @@ public:
 	static inline v8::Handle<v8::Value> New(T* ptr)
 	{
 		v8::HandleScope scope;
-		v8::Local<v8::Value> arg = v8::External::Wrap(ptr);
-		v8::Local<v8::Object> instance = ctor_->NewInstance(1, &arg);
+		v8::Local<v8::Object> instance = ctor_->NewInstance();
+
+		// ptr_ will always be NULL if instantiated by VM
+		node::ObjectWrap::Unwrap<PtrWrap<T> >(instance)->ptr_ = ptr;
+
 		return scope.Close(instance);
 	}
 
@@ -114,7 +117,7 @@ private:
 		}
 
 		PtrWrap<T>* obj = new PtrWrap<T>();
-		obj->ptr_ = (T*)(args[0]->IsUndefined() ? 0 : v8::External::Unwrap(args[0]));
+		obj->ptr_ = NULL;
 		obj->Wrap(args.This());
 
 		return args.This();
