@@ -13,6 +13,8 @@
 #endif
 
 #include <curses.h>
+#include <stdint.h>
+
 #include "ptrwrap.h"
 
 using namespace v8;
@@ -62,8 +64,8 @@ Handle<Value> node_color_pair(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(1)
 	NODE_ARG(0, Number)
-	int n			= CAST_INT32(args[0]->Int32Value());
-	int result		= COLOR_PAIR(n);
+	int32_t n			= CAST_INT32(args[0]->Int32Value());
+	int32_t result		= COLOR_PAIR(n);
 	return scope.Close(Int32::New( result ));
 }
 
@@ -72,7 +74,7 @@ Handle<Value> node_addch(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_ARG(0, Number)
 	chtype ch		= CAST_CHTYPE(args[0]->Int32Value());
-	int result		= addch( ch );
+	int32_t result	= addch( ch );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -85,7 +87,7 @@ Handle<Value> node_box(const Arguments& args) {
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	chtype v		= CAST_CHTYPE(args[1]->Int32Value());
 	chtype h		= CAST_CHTYPE(args[2]->Int32Value());
-	int result		= box( win, v, h );
+	int32_t result	= box( win, v, h );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -94,7 +96,7 @@ Handle<Value> node_delwin(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= delwin( win );
+	int32_t result	= delwin( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -118,7 +120,7 @@ Handle<Value> node_derwin(const Arguments& args) {
 Handle<Value> node_doupdate(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(0)
-	int result		= doupdate( );
+	int32_t result	= doupdate( );
 	return scope.Close(Number::New( result ));
 }
 
@@ -134,7 +136,7 @@ Handle<Value> node_dupwin(const Arguments& args) {
 Handle<Value> node_endwin(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(0)
-	int result		= endwin( );
+	int32_t result	= endwin( );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -143,8 +145,8 @@ Handle<Value> node_getmaxyx(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int y			= 0,
-		x			= 0;
+	int32_t y		= 0,
+			x		= 0;
 	getmaxyx( win, y, x );
 	Local<Object> result = Object::New();
 	result->Set(
@@ -172,10 +174,10 @@ Handle<Value> node_init_color(const Arguments& args) {
 	NODE_ARG(1, Number)
 	NODE_ARG(2, Number)
 	NODE_ARG(3, Number)
-	short a			= CAST_INT16(args[0]->Int32Value());
-	short b			= CAST_INT16(args[1]->Int32Value());
-	short c			= CAST_INT16(args[2]->Int32Value());
-	short d			= CAST_INT16(args[3]->Int32Value());
+	int16_t a		= CAST_INT16(args[0]->Int32Value());
+	int16_t b		= CAST_INT16(args[1]->Int32Value());
+	int16_t c		= CAST_INT16(args[2]->Int32Value());
+	int16_t d		= CAST_INT16(args[3]->Int32Value());
 	int result		= init_color( a, b, c, d );
 	return scope.Close(Int32::New( result ));
 }
@@ -186,9 +188,9 @@ Handle<Value> node_init_pair(const Arguments& args) {
 	NODE_ARG(0, Number)
 	NODE_ARG(1, Number)
 	NODE_ARG(2, Number)
-	short a			= CAST_INT16(args[0]->Int32Value());
-	short b			= CAST_INT16(args[1]->Int32Value());
-	short c			= CAST_INT16(args[2]->Int32Value());
+	int16_t a		= CAST_INT16(args[0]->Int32Value());
+	int16_t b		= CAST_INT16(args[1]->Int32Value());
+	int16_t c		= CAST_INT16(args[2]->Int32Value());
 	int result		= init_pair( a, b, c );
 	return scope.Close(Int32::New( result ));
 }
@@ -204,7 +206,7 @@ Handle<Value> node_keyname(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(1)
 	NODE_ARG(0, Number)
-	int k			= CAST_INT32(args[0]->Int32Value());
+	int32_t k		= CAST_INT32(args[0]->Int32Value());
 	char* result	= keyname( k );
 	return scope.Close(String::New( result ));
 }
@@ -216,7 +218,7 @@ Handle<Value> node_keypad(const Arguments& args) {
 	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	bool b			= CAST_BOOL(args[1]->BooleanValue());
-	int result		= keypad( win, b );
+	int32_t result	= keypad( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -234,7 +236,7 @@ Handle<Value> node_leaveok(const Arguments& args) {
 	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	bool b			= CAST_BOOL(args[1]->BooleanValue());
-	int result		= leaveok( win, b );
+	int32_t result	= leaveok( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -252,7 +254,7 @@ Handle<Value> node_meta(const Arguments& args) {
 	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	bool b			= CAST_BOOL(args[1]->BooleanValue());
-	int result		= meta( win, b );
+	int32_t result	= meta( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -261,8 +263,8 @@ Handle<Value> node_newpad(const Arguments& args) {
 	NODE_ARGS(2)
 	NODE_ARG(0, Number)
 	NODE_ARG(1, Number)
-	int h			= CAST_INT32(args[0]->Int32Value());
-	int w			= CAST_INT32(args[1]->Int32Value());
+	int32_t h		= CAST_INT32(args[0]->Int32Value());
+	int32_t w		= CAST_INT32(args[1]->Int32Value());
 	WINDOW* result	= newpad( h, w );
 	return scope.Close(CAST_POINTER(WINDOW, result));
 }
@@ -274,10 +276,10 @@ Handle<Value> node_newwin(const Arguments& args) {
 	NODE_ARG(1, Number)
 	NODE_ARG(2, Number)
 	NODE_ARG(3, Number)
-	int h			= CAST_INT32(args[0]->Int32Value());
-	int w			= CAST_INT32(args[1]->Int32Value());
-	int y			= CAST_INT32(args[2]->Int32Value());
-	int x			= CAST_INT32(args[3]->Int32Value());
+	int32_t h		= CAST_INT32(args[0]->Int32Value());
+	int32_t w		= CAST_INT32(args[1]->Int32Value());
+	int32_t y		= CAST_INT32(args[2]->Int32Value());
+	int32_t x		= CAST_INT32(args[3]->Int32Value());
 	WINDOW* result	= newwin( h, w, y, x );
 	return scope.Close(CAST_POINTER(WINDOW, result));
 }
@@ -289,14 +291,14 @@ Handle<Value> node_scrollok(const Arguments& args) {
 	NODE_ARG(1, Boolean)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	bool b			= CAST_BOOL(args[1]->BooleanValue());
-	int result		= scrollok( win, b );
+	int32_t result	= scrollok( win, b );
 	return scope.Close(Int32::New( result ));
 }
 
 Handle<Value> node_start_color(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(0)
-	int result		= start_color( );
+	int32_t result	= start_color( );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -309,10 +311,10 @@ Handle<Value> node_subpad(const Arguments& args) {
 	NODE_ARG(3, Number)
 	NODE_ARG(4, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int h			= CAST_INT32(args[1]->Int32Value());
-	int w			= CAST_INT32(args[2]->Int32Value());
-	int y			= CAST_INT32(args[3]->Int32Value());
-	int x			= CAST_INT32(args[4]->Int32Value());
+	int32_t h		= CAST_INT32(args[1]->Int32Value());
+	int32_t w		= CAST_INT32(args[2]->Int32Value());
+	int32_t y		= CAST_INT32(args[3]->Int32Value());
+	int32_t x		= CAST_INT32(args[4]->Int32Value());
 	WINDOW* result	= subpad( win, h, w, y, x );
 	return scope.Close(CAST_POINTER(WINDOW, result));
 }
@@ -326,10 +328,10 @@ Handle<Value> node_subwin(const Arguments& args) {
 	NODE_ARG(3, Number)
 	NODE_ARG(4, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int h			= CAST_INT32(args[1]->Int32Value());
-	int w			= CAST_INT32(args[2]->Int32Value());
-	int y			= CAST_INT32(args[3]->Int32Value());
-	int x			= CAST_INT32(args[4]->Int32Value());
+	int32_t h		= CAST_INT32(args[1]->Int32Value());
+	int32_t w		= CAST_INT32(args[2]->Int32Value());
+	int32_t y		= CAST_INT32(args[3]->Int32Value());
+	int32_t x		= CAST_INT32(args[4]->Int32Value());
 	WINDOW* result	= subwin( win, h, w, y, x );
 	return scope.Close(CAST_POINTER(WINDOW, result));
 }
@@ -342,8 +344,8 @@ Handle<Value> node_waddchnstr(const Arguments& args) {
 	NODE_ARG(2, Number)
 	WINDOW *win		= CAST_PWINDOW(args[0]);
 	String::Value str(args[1]);
-	int n			= CAST_INT32(args[2]->Int32Value());
-	int result		= waddchnstr( win, (chtype*) *str, n );
+	int32_t n		= CAST_INT32(args[2]->Int32Value());
+	int32_t result	= waddchnstr( win, (chtype*) *str, n );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -354,7 +356,7 @@ Handle<Value> node_waddchstr(const Arguments& args) {
 	NODE_ARG(1, String)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	String::Value str(args[1]);
-	int result		= waddchstr( win, (chtype*) *str );
+	int32_t result	= waddchstr( win, (chtype*) *str );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -365,7 +367,7 @@ Handle<Value> node_waddch(const Arguments& args) {
 	NODE_ARG(1, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	chtype ch		= CAST_CHTYPE(args[1]->Int32Value());
-	int result		= waddch( win, ch );
+	int32_t result	= waddch( win, ch );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -377,8 +379,8 @@ Handle<Value> node_waddnstr(const Arguments& args) {
 	NODE_ARG(2, Number)
 	WINDOW *win		= CAST_PWINDOW(args[0]);
 	String::Utf8Value str(args[1]);
-	int n			= CAST_INT32(args[2]->Int32Value());
-	int result		= waddnstr( win, (char*) *str, n );
+	int32_t n		= CAST_INT32(args[2]->Int32Value());
+	int32_t result	= waddnstr( win, *str, n );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -389,7 +391,7 @@ Handle<Value> node_waddstr(const Arguments& args) {
 	NODE_ARG(1, String)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	String::Utf8Value str(args[1]);
-	int result		= waddstr( win, (char*) *str );
+	int32_t result	= waddstr( win, (char*) *str );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -400,7 +402,7 @@ Handle<Value> node_wattroff(const Arguments& args) {
 	NODE_ARG(1, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	chtype ch		= CAST_CHTYPE(args[1]->Int32Value());
-	int result		= wattroff( win, ch );
+	int32_t result	= wattroff( win, ch );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -411,7 +413,7 @@ Handle<Value> node_wattron(const Arguments& args) {
 	NODE_ARG(1, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	chtype ch		= CAST_CHTYPE(args[1]->Int32Value());
-	int result		= wattron( win, ch );
+	int32_t result	= wattron( win, ch );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -422,7 +424,7 @@ Handle<Value> node_wattrset(const Arguments& args) {
 	NODE_ARG(1, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	chtype ch		= CAST_CHTYPE(args[1]->Int32Value());
-	int result		= wattrset( win, ch );
+	int32_t result	= wattrset( win, ch );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -433,7 +435,7 @@ Handle<Value> node_wbkgd(const Arguments& args) {
 	NODE_ARG(1, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	chtype ch		= CAST_CHTYPE(args[1]->Int32Value());
-	int result		= wbkgd( win, ch );
+	int32_t result	= wbkgd( win, ch );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -442,7 +444,7 @@ Handle<Value> node_wclear(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= wclear( win );
+	int32_t result	= wclear( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -451,7 +453,7 @@ Handle<Value> node_wdelch(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= wdelch( win );
+	int32_t result	= wdelch( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -460,7 +462,7 @@ Handle<Value> node_wdeleteln(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= wdeleteln( win );
+	int32_t result	= wdeleteln( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -471,7 +473,7 @@ Handle<Value> node_wechochar(const Arguments& args) {
 	NODE_ARG(1, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	chtype c		= CAST_CHTYPE(args[0]->Int32Value());
-	int result		= wechochar( win, c );
+	int32_t result	= wechochar( win, c );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -480,7 +482,7 @@ Handle<Value> node_werase(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= werase( win );
+	int32_t result	= werase( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -489,7 +491,7 @@ Handle<Value> node_wgetch(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= wgetch( win );
+	int32_t result	= wgetch( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -500,9 +502,9 @@ Handle<Value> node_wmove(const Arguments& args) {
 	NODE_ARG(1, Number)
 	NODE_ARG(2, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int y			= CAST_INT32(args[1]->Int32Value());
-	int x			= CAST_INT32(args[2]->Int32Value());
-	int result		= wmove( win, y, x );
+	int32_t y		= CAST_INT32(args[1]->Int32Value());
+	int32_t x		= CAST_INT32(args[2]->Int32Value());
+	int32_t result	= wmove( win, y, x );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -511,7 +513,7 @@ Handle<Value> node_wnoutrefresh(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= wnoutrefresh( win );
+	int32_t result	= wnoutrefresh( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -520,7 +522,7 @@ Handle<Value> node_wrefresh(const Arguments& args) {
 	NODE_ARGS(1)
 	NODE_PARG(0, WINDOW)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int result		= wrefresh( win );
+	int32_t result	= wrefresh( win );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -530,8 +532,8 @@ Handle<Value> node_wscrl(const Arguments& args) {
 	NODE_PARG(0, WINDOW)
 	NODE_ARG(1, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int i			= CAST_INT32(args[1]->Int32Value());
-	int result		= wscrl( win, i );
+	int32_t i		= CAST_INT32(args[1]->Int32Value());
+	int32_t result	= wscrl( win, i );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -547,9 +549,9 @@ Handle<Value> node_assume_default_colors(const Arguments& args) {
 	NODE_ARGS(2)
 	NODE_ARG(0, Number)
 	NODE_ARG(1, Number)
-	int a			= CAST_INT32(args[0]->Int32Value());
-	int b			= CAST_INT32(args[1]->Int32Value());
-	int result		= assume_default_colors(a, b);
+	int32_t a		= CAST_INT32(args[0]->Int32Value());
+	int32_t b		= CAST_INT32(args[1]->Int32Value());
+	int32_t result	= assume_default_colors(a, b);
 	return scope.Close(Int32::New( result ));
 }
 
@@ -557,7 +559,7 @@ Handle<Value> node_has_key(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(1)
 	NODE_ARG(0, Number)
-	int k			= CAST_INT32(args[0]->Int32Value());
+	int32_t k		= CAST_INT32(args[0]->Int32Value());
 	bool result		= has_key(k)!=0;
 	return scope.Close(Boolean::New( result ));
 }
@@ -565,7 +567,7 @@ Handle<Value> node_has_key(const Arguments& args) {
 Handle<Value> node_use_default_colors(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(0)
-	int result		= use_default_colors();
+	int32_t result	= use_default_colors();
 	return scope.Close(Int32::New( result ));
 }
 
@@ -576,9 +578,9 @@ Handle<Value> node_wresize(const Arguments& args) {
 	NODE_ARG(1, Number)
 	NODE_ARG(2, Number)
 	WINDOW* win		= CAST_PWINDOW(args[0]);
-	int h			= CAST_INT32(args[1]->Int32Value());
-	int w			= CAST_INT32(args[2]->Int32Value());
-	int result		= wresize(win, h, w);
+	int32_t h		= CAST_INT32(args[1]->Int32Value());
+	int32_t w		= CAST_INT32(args[2]->Int32Value());
+	int32_t result	= wresize(win, h, w);
 	return scope.Close(Int32::New( result ));
 }
 
