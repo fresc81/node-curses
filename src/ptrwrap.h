@@ -130,7 +130,8 @@ private:
 		v8::HandleScope scope;
 		char buff[256];
 		memset(buff, 0, 256);
-		sprintf(buff, "[object WINDOW(%p)]", Unwrap(args.This()));
+		v8::String::Utf8Value tp(args.This()->GetConstructorName());
+		sprintf(buff, "[object %s(%p)]", *tp, Unwrap(args.This()));
 		return scope.Close(v8::String::New(buff));
 	}
 

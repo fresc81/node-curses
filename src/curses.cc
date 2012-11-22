@@ -36,7 +36,7 @@ using namespace v8;
 #define NODE_PARG(i, t)																							\
 	if (																										\
 		!args[i]->IsObject() ||																					\
-		!PtrWrap<t>::InstanceOf(args[i])																		\
+		!PtrWrap< t >::InstanceOf(args[i])																		\
 	) {																											\
 		ThrowException(Exception::TypeError(String::New("Wrong type for argument " #i ", expected " #t ".")));	\
 		return scope.Close(Undefined());																		\
