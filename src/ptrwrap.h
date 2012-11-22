@@ -116,7 +116,7 @@ private:
 	{
 		v8::HandleScope scope;
 		if (!args.IsConstructCall()) {
-			ThrowException(Exception::TypeError(String::New("Not constructed via new keyword.")));
+			v8::ThrowException(v8::Exception::TypeError(v8::String::New("Not constructed via new keyword.")));
 			return scope.Close(v8::Undefined());
 		}
 
