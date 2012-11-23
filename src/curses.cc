@@ -584,6 +584,121 @@ Handle<Value> node_wresize(const Arguments& args) {
 	return scope.Close(Int32::New( result ));
 }
 
+#ifdef NODE_CURSES_WINDOWS
+
+Handle<Value> node_mouse_set(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	int32_t fh = CAST_INT32(args[0]->IntegerValue());
+	int32_t fl = CAST_INT32(args[1]->IntegerValue());
+	uint64_t f = ((uint64_t)fl) & (((uint64_t)fh) << 32);
+	int32_t result = mouse_set(static_cast<unsigned long>(f));
+	return scope.Close(Int32::New(result));
+}
+
+Handle<Value> node_mouse_on(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	int32_t fh = CAST_INT32(args[0]->IntegerValue());
+	int32_t fl = CAST_INT32(args[1]->IntegerValue());
+	uint64_t f = ((uint64_t)fl) & (((uint64_t)fh) << 32);
+	int32_t result = mouse_on(static_cast<unsigned long>(f));
+	return scope.Close(Int32::New(result));
+}
+
+Handle<Value> node_mouse_off(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	int32_t fh = CAST_INT32(args[0]->IntegerValue());
+	int32_t fl = CAST_INT32(args[1]->IntegerValue());
+	uint64_t f = ((uint64_t)fl) & (((uint64_t)fh) << 32);
+	int32_t result = mouse_off(static_cast<unsigned long>(f));
+	return scope.Close(Int32::New(result));
+}
+
+Handle<Value> node_request_mouse_pos(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	int32_t result = request_mouse_pos();
+	return scope.Close(Int32::New(result));
+}
+
+Handle<Value> node_map_button(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_ARG(0, Number)
+	NODE_ARG(1, Number)
+	int32_t fh = CAST_INT32(args[0]->IntegerValue());
+	int32_t fl = CAST_INT32(args[1]->IntegerValue());
+	uint64_t f = ((uint64_t)fl) & (((uint64_t)fh) << 32);
+	int32_t result = map_button(static_cast<unsigned long>(f));
+	return scope.Close(Int32::New(result));
+}
+
+Handle<Value> node_wmouse_position(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(1)
+	NODE_PARG(0, WINDOW)
+	WINDOW* win		= CAST_PWINDOW(args[0]);
+	int32_t y		= 0,
+			x		= 0;
+	wmouse_position( win, &y, &x );
+	Local<Object> result = Object::New();
+	result->Set(
+		String::NewSymbol("y"),
+		Int32::New(y)
+	);
+	result->Set(
+		String::NewSymbol("x"),
+		Int32::New(x)
+	);
+	return scope.Close(result);
+}
+
+Handle<Value> node_getmouse(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	uint64_t m = getmouse();
+	int32_t mh = (int32_t)((m >> 32) & 0xffffffff);
+	int32_t ml = (int32_t)(m & 0xffffffff);
+	Local<Object> result = Object::New();
+	result->Set(
+		String::NewSymbol("high"),
+		Int32::New(mh)
+	);
+	result->Set(
+		String::NewSymbol("low"),
+		Int32::New(ml)
+	);
+	return scope.Close(result);
+}
+
+Handle<Value> node_getbmap(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	uint64_t m = getbmap();
+	int32_t mh = (int32_t)((m >> 32) & 0xffffffff);
+	int32_t ml = (int32_t)(m & 0xffffffff);
+	Local<Object> result = Object::New();
+	result->Set(
+		String::NewSymbol("high"),
+		Int32::New(mh)
+	);
+	result->Set(
+		String::NewSymbol("low"),
+		Int32::New(ml)
+	);
+	return scope.Close(result);
+}
+
+#endif
+
 void init(Handle<Object> target) {
 	
 	target->Set(
@@ -963,6 +1078,50 @@ void init(Handle<Object> target) {
 		FunctionTemplate::New(node_wresize)->GetFunction()
 	);
 
+#ifdef NODE_CURSES_WINDOWS
+
+	target->Set(
+		String::NewSymbol("mouse_set"),
+		FunctionTemplate::New(node_mouse_set)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("mouse_on"),
+		FunctionTemplate::New(node_mouse_on)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("mouse_off"),
+		FunctionTemplate::New(node_mouse_off)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("request_mouse_pos"),
+		FunctionTemplate::New(node_request_mouse_pos)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("map_button"),
+		FunctionTemplate::New(node_map_button)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("wmouse_position"),
+		FunctionTemplate::New(node_wmouse_position)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("getmouse"),
+		FunctionTemplate::New(node_getmouse)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("getbmap"),
+		FunctionTemplate::New(node_getbmap)->GetFunction()
+	);
+
+#endif
+
 }
 
 NODE_MODULE(curses, init)
@@ -1258,14 +1417,14 @@ NODE_MODULE(curses, init)
 	int     saveterm(void);
 	int     setsyx(int, int);
 
-	int     mouse_set(unsigned long);
-	int     mouse_on(unsigned long);
-	int     mouse_off(unsigned long);
-	int     request_mouse_pos(void);
-	int     map_button(unsigned long);
-	void    wmouse_position(WINDOW *, int *, int *);
-	unsigned long getmouse(void);
-	unsigned long getbmap(void);
+#	int     mouse_set(unsigned long);
+#	int     mouse_on(unsigned long);
+#	int     mouse_off(unsigned long);
+#	int     request_mouse_pos(void);
+#	int     map_button(unsigned long);
+#	void    wmouse_position(WINDOW *, int *, int *);
+#	unsigned long getmouse(void);
+#	unsigned long getbmap(void);
 
 #	int     assume_default_colors(int, int);
 #	const char *curses_version(void);
