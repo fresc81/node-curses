@@ -1,6 +1,6 @@
 {
 	"name" : "curses",
-	"version" : "0.0.7",
+	"version" : "0.0.8",
 	"description" : "Bindings for the native curses library, a full featured console IO library.",
 	"main" : "./curses",
 	"dependencies" : {
