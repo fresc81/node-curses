@@ -91,6 +91,13 @@ Handle<Value> node_box(const Arguments& args) {
 	return scope.Close(Int32::New( result ));
 }
 
+Handle<Value> node_cbreak(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	int32_t result	= cbreak(  );
+	return scope.Close(Int32::New( result ));
+}
+
 Handle<Value> node_delwin(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(1)
@@ -131,6 +138,13 @@ Handle<Value> node_dupwin(const Arguments& args) {
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	WINDOW* result	= dupwin( win );
 	return scope.Close(CAST_POINTER(WINDOW, result));
+}
+
+Handle<Value> node_echo(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	int32_t result	= echo( );
+	return scope.Close(Int32::New( result ));
 }
 
 Handle<Value> node_endwin(const Arguments& args) {
@@ -282,6 +296,31 @@ Handle<Value> node_newwin(const Arguments& args) {
 	int32_t x		= CAST_INT32(args[3]->Int32Value());
 	WINDOW* result	= newwin( h, w, y, x );
 	return scope.Close(CAST_POINTER(WINDOW, result));
+}
+
+Handle<Value> node_nocbreak(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	int32_t result	= nocbreak( );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_nodelay(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(2)
+	NODE_PARG(0, WINDOW)
+	NODE_ARG(1, Boolean)
+	WINDOW* win		= CAST_PWINDOW(args[0]);
+	bool b			= CAST_BOOL(args[1]->BooleanValue());
+	int32_t result	= nodelay( win, b );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_noecho(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(0)
+	int32_t result	= noecho( );
+	return scope.Close(Int32::New( result ));
 }
 
 Handle<Value> node_scrollok(const Arguments& args) {
@@ -849,6 +888,11 @@ void init(Handle<Object> target) {
 	);
 	
 	target->Set(
+		String::NewSymbol("cbreak"),
+		FunctionTemplate::New(node_cbreak)->GetFunction()
+	);
+
+	target->Set(
 		String::NewSymbol("delwin"),
 		FunctionTemplate::New(node_delwin)->GetFunction()
 	);
@@ -868,6 +912,11 @@ void init(Handle<Object> target) {
 		FunctionTemplate::New(node_dupwin)->GetFunction()
 	);
 	
+	target->Set(
+		String::NewSymbol("echo"),
+		FunctionTemplate::New(node_echo)->GetFunction()
+	);
+
 	target->Set(
 		String::NewSymbol("endwin"),
 		FunctionTemplate::New(node_endwin)->GetFunction()
@@ -938,6 +987,21 @@ void init(Handle<Object> target) {
 		FunctionTemplate::New(node_newwin)->GetFunction()
 	);
 	
+	target->Set(
+		String::NewSymbol("nocbreak"),
+		FunctionTemplate::New(node_nocbreak)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("nodelay"),
+		FunctionTemplate::New(node_nodelay)->GetFunction()
+	);
+
+	target->Set(
+		String::NewSymbol("noecho"),
+		FunctionTemplate::New(node_noecho)->GetFunction()
+	);
+
 	target->Set(
 		String::NewSymbol("scrollok"),
 		FunctionTemplate::New(node_scrollok)->GetFunction()
@@ -1127,7 +1191,6 @@ void init(Handle<Object> target) {
 NODE_MODULE(curses, init)
 
 
-
 /*
 
 	TODO: implement functions and tag with #
@@ -1152,7 +1215,7 @@ NODE_MODULE(curses, init)
 	int     border(chtype, chtype, chtype, chtype, chtype, chtype, chtype, chtype);
 #	int     box(WINDOW *, chtype, chtype);
 	bool    can_change_color(void);
-	int     cbreak(void); 
+#	int     cbreak(void);
 	int     chgat(int, attr_t, short, const void *);
 	int     clearok(WINDOW *, bool);
 	int     clear(void);
@@ -1173,7 +1236,7 @@ NODE_MODULE(curses, init)
 #	int     doupdate(void);
 #	WINDOW *dupwin(WINDOW *);
 	int     echochar(const chtype);
-	int     echo(void);
+#	int     echo(void);
 #	int     endwin(void);
 	char    erasechar(void);
 	int     erase(void);
@@ -1268,9 +1331,9 @@ NODE_MODULE(curses, init)
 	SCREEN *newterm(const char *, FILE *, FILE *);
 #	WINDOW *newwin(int, int, int, int);
 	int     nl(void);
-	int     nocbreak(void);
-	int     nodelay(WINDOW *, bool);
-	int     noecho(void);
+#	int     nocbreak(void);
+#	int     nodelay(WINDOW *, bool);
+#	int     noecho(void);
 	int     nonl(void);
 	void    noqiflush(void);
 	int     noraw(void);
