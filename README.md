@@ -93,9 +93,9 @@ curses.wgetch(subwin);
 curses.endwin();
 ```
 
-![hello.js](node-curses/wiki/hello.png)
+![hello.js](https://github.com/fresc81/node-curses/wiki/hello.png)
 
-Look at the bottom of [curses.cc](node-curses/blob/master/src/curses.cc "src/curses") to
+Look at the bottom of [curses.cc](https://github.com/fresc81/node-curses/blob/master/src/curses.cc "src/curses") to
 see what already has been implemented.
 
 See the ncurses manual for descriptions of the functions.

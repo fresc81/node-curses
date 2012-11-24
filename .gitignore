@@ -6,8 +6,6 @@ lib-cov
 *.out
 *.pid
 *.gz
-.project
-.settings
 deps
 build
 
@@ -17,4 +15,7 @@ results
 
 node_modules
 npm-debug.log
-/.cproject
+.cproject
+.externalToolBuilders
+.project
+.settings
