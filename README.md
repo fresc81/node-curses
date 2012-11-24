@@ -93,9 +93,13 @@ curses.wgetch(subwin);
 curses.endwin();
 ```
 
+![hello.js](node-curses/wiki/hello.png)
+
+Look at the bottom of [curses.cc](node-curses/blob/master/src/curses.cc "src/curses") to
+see what already has been implemented.
 
 See the ncurses manual for descriptions of the functions.
 
-http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/
+[ncurses HOWTO](http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/ "ncurses HOWTO")
 
-http://invisible-island.net/ncurses/man/ncurses.3x.html
+[ncurses manual](http://invisible-island.net/ncurses/man/ncurses.3x.html "ncurses manual")
