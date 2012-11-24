@@ -1,4 +1,3 @@
-
 /* load curses */
 var curses = require('../curses')
 
@@ -38,10 +37,11 @@ var sub_height = 20
 ;
 
 /* setup the subwindow's background and echo Hello world! into it */
-curses.wattrset(subwin, curses.color_pair(GLYPH_COLOR));
-curses.wbkgd(subwin, '\u2591'.charCodeAt(0));
+curses.wbkgd(subwin, ' '.charCodeAt(0)|curses.color_pair(GLYPH_COLOR)|curses.A_REVERSE);
 curses.wclear(subwin);
+curses.box(subwin, 0, 0);
 curses.wmove(subwin, 1, 8);
+curses.wattrset(subwin, curses.color_pair(GLYPH_COLOR));
 curses.waddstr(subwin, "Hello world!");
 curses.wrefresh(subwin);
 
