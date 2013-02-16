@@ -181,6 +181,19 @@ Handle<Value> node_has_colors(const Arguments& args) {
 	return scope.Close(Boolean::New( result ));
 }
 
+Handle<Value> node_whline(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(3)
+	NODE_PARG(0, WINDOW)
+	NODE_ARG(1, Number)
+	NODE_ARG(2, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]);
+	chtype ch		= CAST_CHTYPE(args[1]->Int32Value());
+	int32_t n		= CAST_INT32(args[2]->Int32Value());
+	int32_t result	= whline( win, ch, n );
+	return scope.Close(Int32::New( result ));
+}
+
 Handle<Value> node_init_color(const Arguments& args) {
 	HandleScope scope;
 	NODE_ARGS(4)
@@ -573,6 +586,19 @@ Handle<Value> node_wscrl(const Arguments& args) {
 	WINDOW* win		= CAST_PWINDOW(args[0]);
 	int32_t i		= CAST_INT32(args[1]->Int32Value());
 	int32_t result	= wscrl( win, i );
+	return scope.Close(Int32::New( result ));
+}
+
+Handle<Value> node_wvline(const Arguments& args) {
+	HandleScope scope;
+	NODE_ARGS(3)
+	NODE_PARG(0, WINDOW)
+	NODE_ARG(1, Number)
+	NODE_ARG(2, Number)
+	WINDOW* win		= CAST_PWINDOW(args[0]);
+	chtype ch		= CAST_CHTYPE(args[1]->Int32Value());
+	int32_t n		= CAST_INT32(args[2]->Int32Value());
+	int32_t result	= wvline( win, ch, n );
 	return scope.Close(Int32::New( result ));
 }
 
@@ -1098,6 +1124,11 @@ void init(Handle<Object> target) {
 	);
 
 	target->Set(
+		String::NewSymbol("whline"),
+		FunctionTemplate::New(node_whline)->GetFunction()
+	);
+
+	target->Set(
 		String::NewSymbol("wmove"),
 		FunctionTemplate::New(node_wmove)->GetFunction()
 	);
@@ -1117,6 +1148,11 @@ void init(Handle<Object> target) {
 		FunctionTemplate::New(node_wscrl)->GetFunction()
 	);
 	
+	target->Set(
+		String::NewSymbol("wvline"),
+		FunctionTemplate::New(node_wvline)->GetFunction()
+	);
+
 	target->Set(
 		String::NewSymbol("assume_default_colors"),
 		FunctionTemplate::New(node_assume_default_colors)->GetFunction()
@@ -1432,7 +1468,7 @@ NODE_MODULE(curses, init)
 #	int     wgetch(WINDOW *);
 	int     wgetnstr(WINDOW *, char *, int);
 	int     wgetstr(WINDOW *, char *);
-	int     whline(WINDOW *, chtype, int);
+#	int     whline(WINDOW *, chtype, int);
 	int     winchnstr(WINDOW *, chtype *, int);
 	int     winchstr(WINDOW *, chtype *);
 	chtype  winch(WINDOW *);
@@ -1457,7 +1493,7 @@ NODE_MODULE(curses, init)
 	void    wsyncup(WINDOW *);
 	void    wtimeout(WINDOW *, int);
 	int     wtouchln(WINDOW *, int, int, int);
-	int     wvline(WINDOW *, chtype, int);
+#	int     wvline(WINDOW *, chtype, int);
 
 	chtype  getattrs(WINDOW *);
 	int     getbegx(WINDOW *);
