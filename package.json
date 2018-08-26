@@ -4,7 +4,7 @@
   "description": "Bindings for the native curses library, a full featured console IO library.",
   "main": "./curses",
   "dependencies": {
-    "tar": ">=0.1.13"
+    "tar": "~2"
   },
   "scripts": {
     "install": "node ./pre-build.js",
